@@ -1,0 +1,23 @@
+[Unit]
+Description=ToubaTV Streaming Service (SRT to HLS)
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/srv/toubatv
+ExecStart=/usr/local/bin/toubatv.sh
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Limites de ressources
+LimitNOFILE=65536
+
+# Variables d'environnement
+Environment="FFREPORT=file=/srv/toubatv/logs/ffmpeg_report.log:level=32"
+
+[Install]
+WantedBy=multi-user.target
+
