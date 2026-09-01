@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Broadcast SN — Stream Control Center | Présentation commerciale</title>
+  <meta name="description" content="Plateforme professionnelle de streaming radio et TV — Global Media Streaming par Broadcast SN, Dakar." />
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --surface: #121a27;
+      --surface-2: #1a2436;
+      --border: #2a3a52;
+      --text: #e8edf5;
+      --muted: #8fa3bf;
+      --accent: #38bdf8;
+      --accent-dim: rgba(56, 189, 248, 0.12);
+      --success: #34d399;
+      --warning: #fbbf24;
+      --radius: 14px;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      background: rgba(11, 15, 23, 0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .nav-brand img { height: 32px; }
+
+    .nav-dots {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-dots a {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      text-indent: -9999px;
+      overflow: hidden;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .nav-dots a:hover,
+    .nav-dots a.active { background: var(--accent); transform: scale(1.25); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #0b0f17;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    /* Slides */
+    .slide {
+      min-height: 100vh;
+      padding: 5rem 2rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .slide--hero {
+      text-align: center;
+      align-items: center;
+      min-height: 100vh;
+      padding-top: 6rem;
+    }
+
+    .slide--hero .logo-main { height: 72px; margin-bottom: 2rem; }
+
+    .slide--hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .slide--hero .tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .slide--hero .subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 640px;
+      margin-bottom: 2.5rem;
+    }
+
+    .client-logos {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .client-logos img {
+      height: 48px;
+      opacity: 0.9;
+      filter: brightness(1.05);
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .badge {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 720px;
+      margin-bottom: 2rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .nav-dots { display: none; }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .card p, .card li { color: var(--muted); font-size: 0.95rem; }
+
+    .card ul { padding-left: 1.2rem; margin-top: 0.5rem; }
+    .card li { margin-bottom: 0.35rem; }
+
+    .problem { border-left: 3px solid #f87171; }
+    .solution { border-left: 3px solid var(--success); }
+
+    .screenshot-wrap {
+      margin-top: 1.5rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .screenshot-wrap img {
+      width: 100%;
+      display: block;
+    }
+
+    .screenshot-caption {
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+
+    .feature-item strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 0.95rem;
+    }
+
+    .feature-item span { color: var(--muted); font-size: 0.88rem; }
+
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .stack-tag {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    .cta-box {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .cta-box h2 { margin-bottom: 0.75rem; }
+
+    .cta-box p { color: var(--muted); margin-bottom: 1.5rem; }
+
+    .cta-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.4rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary { background: var(--accent); color: #0b0f17; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .split-layout { grid-template-columns: 1fr; }
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .metric-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .metric .value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .metric .label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    @media print {
+      .nav { display: none !important; }
+      html { scroll-behavior: auto; }
+      body {
+        background: var(--bg);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .slide {
+        min-height: auto;
+        padding: 1.5rem 0;
+        page-break-after: always;
+        break-after: page;
+      }
+      .slide:last-of-type { page-break-after: auto; }
+      .screenshot-wrap { break-inside: avoid; }
+      footer {
+        page-break-before: always;
+        break-before: page;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <img src="logo-broadcast-sn.png" alt="Broadcast SN" />
+      <span>Stream Control Center</span>
+    </div>
+    <div class="nav-dots" id="navDots"></div>
+    <a class="nav-cta" href="https://stream.broadcastsn.com" target="_blank" rel="noopener">Voir la démo live</a>
+  </nav>
+
+  <!-- Slide 1 : Couverture -->
+  <section class="slide slide--hero" id="s1">
+    <img class="logo-main" src="logo-broadcast-sn.png" alt="Broadcast SN" />
+    <p class="tagline">Professionnel des nouveaux médias</p>
+    <h1>Stream Control Center</h1>
+    <p class="subtitle">
+      La plateforme tout-en-un pour piloter, diffuser et monitorer vos flux radio &amp; TV
+      en temps réel — SRT, RTMP, HLS et Icecast, depuis un seul tableau de bord.
+    </p>
+    <div class="client-logos">
+      <img src="logo-toubatv.png" alt="Touba TV" />
+      <img src="logo-oceanfm.png" alt="Ocean FM" />
+      <img src="logo-global-media.png" alt="Global Media Streaming" />
+    </div>
+    <div class="badge-row">
+      <span class="badge">Multi-protocole</span>
+      <span class="badge">Temps réel</span>
+      <span class="badge">VPS dédié</span>
+      <span class="badge">Dakar, Sénégal</span>
+    </div>
+  </section>
+
+  <!-- Slide 2 : Problème / Solution -->
+  <section class="slide" id="s2">
+    <h2>Le défi des diffuseurs modernes</h2>
+    <p class="section-lead">
+      Gérer plusieurs chaînes, protocoles et serveurs sans outil centralisé coûte du temps,
+      augmente les risques d'incident et complique la prise de décision en direct.
+    </p>
+    <div class="grid-2">
+      <div class="card problem">
+        <h3>Sans plateforme unifiée</h3>
+        <ul>
+          <li>Console SRS, Icecast et scripts SRT éparpillés</li>
+          <li>Aucune vue globale des flux actifs et du bitrate</li>
+          <li>Interventions manuelles SSH en cas de panne</li>
+          <li>Enregistrements difficiles à piloter et archiver</li>
+          <li>Pas de monitoring CPU/RAM/disque intégré</li>
+        </ul>
+      </div>
+      <div class="card solution">
+        <h3>Avec Stream Control Center</h3>
+        <ul>
+          <li>Dashboard unique pour tous les flux et protocoles</li>
+          <li>KPI temps réel : bitrate, clients, CPU, disque</li>
+          <li>Actions opérateur en un clic (reload SRS, redémarrage)</li>
+          <li>Enregistrements HLS start/stop depuis l'interface</li>
+          <li>Alertes, runbook et journaux centralisés</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 3 : Chiffres clés -->
+  <section class="slide" id="s3">
+    <h2>Une infrastructure éprouvée en production</h2>
+    <p class="section-lead">
+      Déployée pour <strong>Ocean FM</strong>, <strong>Touba TV</strong> et des flux TV externes,
+      sur infrastructure VPS haute disponibilité à Dakar.
+    </p>
+    <div class="metric-row">
+      <div class="metric"><div class="value">5+</div><div class="label">Flux gérés simultanément</div></div>
+      <div class="metric"><div class="value">4</div><div class="label">Protocoles supportés</div></div>
+      <div class="metric"><div class="value">24/7</div><div class="label">Monitoring continu</div></div>
+      <div class="metric"><div class="value">HTTPS</div><div class="label">Accès sécurisé JWT</div></div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-item"><strong>SRT</strong><span>Contribution vidéo faible latence, ports UDP configurables</span></div>
+      <div class="feature-item"><strong>RTMP</strong><span>Publication dynamique, restream et sortie HLS</span></div>
+      <div class="feature-item"><strong>HLS</strong><span>Diffusion adaptive vers le web et les apps</span></div>
+      <div class="feature-item"><strong>Icecast</strong><span>Radio en continu (Ocean FM et montages)</span></div>
+    </div>
+  </section>
+
+  <!-- Slide 4 : Login -->
+  <section class="slide" id="s4">
+    <div class="split-layout">
+      <div>
+        <h2>Accès sécurisé &amp; branding pro</h2>
+        <p class="section-lead">
+          Interface d'authentification réservée aux opérateurs, avec identité visuelle Broadcast SN.
+          Connexion JWT, limite de tentatives et session sécurisée.
+        </p>
+        <div class="stack-tags">
+          <span class="stack-tag">Auth JWT</span>
+          <span class="stack-tag">HTTPS</span>
+          <span class="stack-tag">Rôles admin</span>
+        </div>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="screenshots/01-login.png" alt="Écran de connexion Stream Control Center" loading="eager" />
+        <div class="screenshot-caption">Écran de connexion — accès réservé aux administrateurs</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 5 : Dashboard -->
+  <section class="slide" id="s5">
+    <h2>Dashboard temps réel</h2>
+    <p class="section-lead">
+      Vue d'ensemble instantanée : flux en direct, bitrate entrant, enregistrements actifs,
+      charge CPU/RAM et filtres par protocole et statut. Graphiques interactifs avec historique.
+    </p>
+    <div class="screenshot-wrap">
+      <img src="screenshots/02-dashboard.png" alt="Dashboard Stream Control Center" loading="eager" />
+      <div class="screenshot-caption">KPI cliquables, filtres SRT/RTMP/HLS/Icecast, graphiques area et actions rapides</div>
+    </div>
+  </section>
+
+  <!-- Slide 6 : Flux en direct -->
+  <section class="slide" id="s6">
+    <h2>Gestion des flux en direct</h2>
+    <p class="section-lead">
+      Tableau détaillé de tous les flux : statut signal HLS, bitrate, résolution, FPS,
+      clients connectés et liens de sortie. Prévisualisation et copie d'URL en un clic.
+    </p>
+    <div class="screenshot-wrap">
+      <img src="screenshots/03-streams.png" alt="Page Flux en direct" loading="eager" />
+      <div class="screenshot-caption">Agrégation SRT, RTMP et Icecast — statut live/offline en temps réel</div>
+    </div>
+  </section>
+
+  <!-- Slide 7 : Monitoring -->
+  <section class="slide" id="s7">
+    <h2>Monitoring système avancé</h2>
+    <p class="section-lead">
+      Métriques serveur détaillées : CPU, RAM, disque, réseau, conteneurs Docker SRS/Oryx
+      et santé des services systemd. Anticipez les incidents avant qu'ils n'impactent l'antenne.
+    </p>
+    <div class="screenshot-wrap">
+      <img src="screenshots/04-monitoring.png" alt="Page Monitoring" loading="eager" />
+      <div class="screenshot-caption">Métriques système, stack Docker et état des services</div>
+    </div>
+  </section>
+
+  <!-- Slide 8 : Enregistrements -->
+  <section class="slide" id="s8">
+    <div class="split-layout">
+      <div class="screenshot-wrap">
+        <img src="screenshots/05-recordings.png" alt="Page Enregistrements" loading="eager" />
+        <div class="screenshot-caption">Pilotage des enregistrements HLS et gestion de l'espace disque</div>
+      </div>
+      <div>
+        <h2>Enregistrements &amp; archivage</h2>
+        <p class="section-lead">
+          Démarrez et arrêtez les enregistrements HLS depuis l'interface.
+          Téléchargez, supprimez et surveillez l'espace disque /srv/recordings.
+          Idéal pour la conformité, le replay et l'archivage éditorial.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 9 : SRT & RTMP -->
+  <section class="slide" id="s9">
+    <h2>Contrôle SRT &amp; RTMP</h2>
+    <p class="section-lead">
+      Créez et gérez vos flux de contribution vidéo sans ligne de commande.
+      Configuration des ports, modes HLS/restream et intégration systemd automatique.
+    </p>
+    <div class="grid-2">
+      <div class="screenshot-wrap">
+        <img src="screenshots/06-srt.png" alt="Contrôle SRT" loading="eager" />
+        <div class="screenshot-caption">Contrôle SRT — création et gestion des flux UDP</div>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="screenshots/07-rtmp.png" alt="Flux RTMP" loading="eager" />
+        <div class="screenshot-caption">Flux RTMP dynamiques — publication et restream</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 10 : Endpoints & Watch -->
+  <section class="slide" id="s10">
+    <h2>Endpoints &amp; lecture publique</h2>
+    <p class="section-lead">
+      Centralisez tous vos liens HLS, RTMP et Icecast. Page watch publique pour la prévisualisation
+      sans authentification — parfaite pour les équipes rédaction et les partenaires.
+    </p>
+    <div class="grid-2">
+      <div class="screenshot-wrap">
+        <img src="screenshots/08-endpoints.png" alt="Endpoints et liens" loading="eager" />
+        <div class="screenshot-caption">Répertoire des endpoints et liens de diffusion</div>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="screenshots/09-watch.png" alt="Page Watch publique" loading="eager" />
+        <div class="screenshot-caption">Lecteur public /watch — accès sans login</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 11 : Stack & offre -->
+  <section class="slide" id="s11">
+    <h2>Stack technique &amp; offre</h2>
+    <p class="section-lead">
+      Solution clé en main : infrastructure VPS, reverse proxy Nginx, moteur SRS/Oryx,
+      Icecast et application web Next.js — déployée et maintenue par Broadcast SN.
+    </p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Technologies</h3>
+        <div class="stack-tags" style="margin-top:0.75rem">
+          <span class="stack-tag">Next.js 16</span>
+          <span class="stack-tag">React 19</span>
+          <span class="stack-tag">SRS / Oryx</span>
+          <span class="stack-tag">Nginx</span>
+          <span class="stack-tag">Icecast2</span>
+          <span class="stack-tag">FFmpeg</span>
+          <span class="stack-tag">Docker</span>
+          <span class="stack-tag">PM2</span>
+          <span class="stack-tag">Prometheus</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Ce que nous proposons</h3>
+        <ul>
+          <li>Déploiement sur VPS dédié ou mutualisé</li>
+          <li>Configuration multi-flux radio &amp; TV</li>
+          <li>Formation opérateur et documentation</li>
+          <li>Maintenance, mises à jour et support</li>
+          <li>Personnalisation branding &amp; domaine</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <h2>Prêt à professionnaliser votre diffusion ?</h2>
+      <p>
+        Découvrez la plateforme en direct ou contactez Broadcast SN pour une démonstration personnalisée.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://stream.broadcastsn.com" target="_blank" rel="noopener">
+          Accéder à la démo
+        </a>
+        <a class="btn btn-secondary" href="mailto:broadcastsn.dkr@gmail.com">
+          broadcastsn.dkr@gmail.com
+        </a>
+        <a class="btn btn-secondary" href="tel:+221777245654">
+          +221 77 724 56 54
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Broadcast SN — Global Media Streaming · stream.broadcastsn.com</p>
+    <p style="margin-top:0.5rem">Professionnel des nouveaux médias · Dakar, Sénégal</p>
+  </footer>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.getElementById('navDots');
+
+    slides.forEach((slide, i) => {
+      const a = document.createElement('a');
+      a.href = '#' + slide.id;
+      a.textContent = 'Slide ' + (i + 1);
+      a.title = slide.querySelector('h1, h2')?.textContent || '';
+      dots.appendChild(a);
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            const idx = [...slides].indexOf(e.target);
+            dots.querySelectorAll('a').forEach((d, j) => {
+              d.classList.toggle('active', j === idx);
+            });
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    slides.forEach((s) => observer.observe(s));
+  </script>
+</body>
+</html>

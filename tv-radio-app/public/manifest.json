@@ -1,0 +1,56 @@
+{
+  "name": "Touba TV - En Direct",
+  "short_name": "Touba TV",
+  "description": "Regardez Touba TV en direct, streaming 24/7",
+  "start_url": "/watch",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "landscape-primary",
+  "scope": "/watch",
+  "icons": [
+    {
+      "src": "/logo-toubatv.png",
+      "sizes": "640x480",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-light-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-dark-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["music", "entertainment", "radio"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Regarder en direct",
+      "short_name": "Live",
+      "description": "Lancer la lecture en direct",
+      "url": "/watch",
+      "icons": [
+        {
+          "src": "/logo-toubatv.png",
+          "sizes": "640x480"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}
