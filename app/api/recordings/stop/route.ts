@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { requireAuth } from '@/lib/require-auth'
+import { killWithEscalation } from '@/lib/process-kill'
+import { logInfo, logWarn } from '@/lib/logger'
 
 export const runtime = "nodejs"
 
@@ -59,11 +61,30 @@ export async function POST(request: NextRequest){
   }
 
   if (rec.pid > 0) {
-    try {
-      process.kill(rec.pid, "SIGINT")
-    } catch {
-      // ignore
-    }
+    // Fire-and-forget : le SIGINT initial (arrêt propre ffmpeg) est quasi
+    // instantané dans le cas normal ; l'escalade SIGTERM/SIGKILL ne doit pas
+    // faire attendre la réponse HTTP à l'opérateur.
+    killWithEscalation(rec.pid, { graceSignal: "SIGINT" })
+      .then((result) => {
+        if (result.outcome === "unresponsive") {
+          logWarn(request, "recordings/stop", "ffmpeg ne répond à aucun signal", {
+            action: "recording_stop",
+            streamId,
+            pid: rec.pid,
+            result: "unresponsive",
+          })
+          return
+        }
+        logInfo(request, "recordings/stop", "ffmpeg arrêté", {
+          action: "recording_stop",
+          streamId,
+          pid: rec.pid,
+          result: result.outcome,
+        })
+      })
+      .catch(() => {
+        /* best-effort */
+      })
   }
 
   delete state.active[streamId]

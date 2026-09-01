@@ -7,6 +7,7 @@ import { gateRecordingsDiskSpace } from "@/lib/recordings-disk"
 import { recordingStartBodySchema } from "@/lib/schemas/recordings"
 import { zodErrorResponse } from "@/lib/zod-response"
 import { requireAuth } from '@/lib/require-auth'
+import { isAlive } from '@/lib/process-kill'
 
 export const runtime = "nodejs"
 
@@ -34,7 +35,14 @@ async function loadState(): Promise<RecordingState> {
   try {
     const raw = await readFile(STATE_FILE, "utf8")
     const parsed = JSON.parse(raw) as RecordingState
-    return parsed?.active ? parsed : { active: {} }
+    if (!parsed?.active) return { active: {} }
+    // Réconciliation : purge les entrées dont le PID n'existe plus (crash
+    // serveur, ffmpeg tué hors de l'app) pour ne pas bloquer un futur "start"
+    // sur un enregistrement qu'on croit encore actif.
+    for (const [streamId, rec] of Object.entries(parsed.active)) {
+      if (!isAlive(rec.pid)) delete parsed.active[streamId]
+    }
+    return parsed
   } catch {
     return { active: {} }
   }
