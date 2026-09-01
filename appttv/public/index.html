@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TOUBA TV — Admin dédicaces</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>TOUBA TV · Admin</h1>
+      <p>Modération, pubs &amp; vMix — stream.broadcastsn.com</p>
+    </div>
+    <div id="userBar" class="user-bar hidden">
+      <span id="userEmail"></span>
+      <button type="button" class="btn btn-ghost" id="btnLogout">Déconnexion</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="loginSection" class="login-box">
+      <h2>Connexion modérateur</h2>
+      <p style="color: var(--muted); font-size: 0.9rem;">Connectez-vous avec le compte Google autorisé dans Firestore <code>admins/</code>.</p>
+      <button type="button" class="btn" id="btnGoogle" style="margin-top: 1rem;">Continuer avec Google</button>
+    </section>
+
+    <section id="appSection" class="hidden">
+      <nav class="tabs" id="mainTabs">
+        <button type="button" data-tab="mod" class="active">Modération</button>
+        <button type="button" data-tab="pubs">Pubs (live)</button>
+        <button type="button" data-tab="vmix">vMix XML</button>
+      </nav>
+
+      <div id="tabMod">
+        <div class="tabs" id="statusTabs">
+          <button type="button" data-status="queued" class="active">En attente</button>
+          <button type="button" data-status="approved">Approuvés</button>
+          <button type="button" data-status="rejected">Rejetés</button>
+          <button type="button" data-status="broadcast">Diffusés</button>
+        </div>
+        <p id="statusLine" class="meta">Chargement…</p>
+        <div id="messageList"></div>
+      </div>
+
+      <div id="tabPubs" class="hidden">
+        <div class="card">
+          <h3>Configuration live &amp; cassoulette pub</h3>
+          <label>URL flux HLS</label>
+          <input type="url" id="hlsUrl" />
+          <label>Viewers (affichage)</label>
+          <input type="number" id="viewers" min="0" />
+          <div id="adsEditor"></div>
+          <button type="button" class="btn" id="btnAddAd">+ Pub</button>
+          <div class="actions">
+            <button type="button" class="btn btn-ok" id="btnSaveLive">Enregistrer</button>
+            <button type="button" class="btn btn-ghost" id="btnSeed">Initialiser tarifs &amp; live</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="tabVmix" class="hidden">
+        <div class="card">
+          <h3>URLs vMix (réseau distant)</h3>
+          <p class="meta">Dans vMix → Data Sources → Remote (HTTP), rafraîchissement 5000 ms.</p>
+          <div class="hint">
+            <strong>Fichier XML (recommandé)</strong><br />
+            <code id="urlCurrent"></code>
+            <br /><br />
+            <strong>File FIFO automatique</strong> (consomme à chaque refresh)<br />
+            <code id="urlFifo"></code>
+          </div>
+          <div class="actions" style="margin-top: 1rem;">
+            <button type="button" class="btn btn-ghost" id="btnCopyCurrent">Copier URL fichier XML</button>
+            <button type="button" class="btn btn-ghost" id="btnCopyFifo">Copier URL FIFO</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast"></div>
+
+  <script src="firebase-config.js"></script>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

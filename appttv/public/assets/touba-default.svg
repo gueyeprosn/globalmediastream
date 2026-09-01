@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" role="img" aria-label="TOUBA TV">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="320" rx="24" fill="url(#bg)"/>
+  <circle cx="160" cy="118" r="52" fill="#2563eb" opacity="0.35"/>
+  <polygon points="140,88 140,148 188,118" fill="#fff"/>
+  <text x="160" y="210" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-size="28" font-weight="700">TOUBA TV</text>
+  <text x="160" y="242" text-anchor="middle" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="14">Photo par d�faut</text>
+</svg>

@@ -1,0 +1,4 @@
+# Déprécié — utiliser deploy/nginx-includes/appttv.conf
+# Voir deploy/stream.broadcastsn.com-snippet.conf
+
+include deploy/nginx-includes/appttv.conf;
