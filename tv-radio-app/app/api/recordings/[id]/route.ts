@@ -4,12 +4,13 @@ import { parseSafeRecordingFilename, recordingAbsPath, RECORDINGS_DIR } from "@/
 import { recordingRenameBodySchema } from "@/lib/schemas/recordings"
 import { zodErrorResponse } from "@/lib/zod-response"
 import { logInfo, logWarn } from "@/lib/logger"
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 
 export const runtime = "nodejs"
 
-export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }){
-  const __auth = await requireAuth(request)
+async function patchHandler(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const __auth = await requireRole('recording:stop')(request)
   if (!__auth.ok) return __auth.response
 
   const { id } = await context.params
@@ -52,8 +53,10 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
   return NextResponse.json({ ok: true, id: newName })
 }
 
-export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }){
-  const __auth = await requireAuth(request)
+export const PATCH = withAudit('recording:stop', patchHandler)
+
+async function deleteHandler(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const __auth = await requireRole('recording:delete')(request)
   if (!__auth.ok) return __auth.response
 
   const { id } = await context.params
@@ -87,4 +90,6 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
 
   return NextResponse.json({ ok: true })
 }
+
+export const DELETE = withAudit('recording:delete', deleteHandler)
 

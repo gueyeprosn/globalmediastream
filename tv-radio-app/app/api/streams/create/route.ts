@@ -4,7 +4,8 @@ import { existsSync, mkdirSync } from 'fs'
 import { allocateSrtUdpPorts, collectUsedSrtPorts, isNativeSrsSrtPort } from '@/lib/srt-ports'
 import { buildSrtListenerUrl } from '@/lib/srt-url'
 import { getSrtStreamsRegistryPath } from '@/lib/paths'
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 import {
   assertSafeStreamSlug,
   assertTcpUdpPort,
@@ -50,8 +51,8 @@ async function saveSrtStreamRegistry(streams: SrtStreamRegistryItem[]) {
   await writeFile(getSrtStreamsRegistryPath(), JSON.stringify(streams, null, 2))
 }
 
-export async function POST(request: NextRequest){
-  const __auth = await requireAuth(request)
+async function postHandler(request: NextRequest) {
+  const __auth = await requireRole('stream:create')(request)
   if (!__auth.ok) return __auth.response
 
   try {
@@ -519,3 +520,5 @@ WantedBy=multi-user.target
     )
   }
 }
+
+export const POST = withAudit('stream:create', postHandler)

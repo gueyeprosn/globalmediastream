@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server'
 import * as jose from 'jose'
 import { ADMIN_TOKEN_COOKIE } from '@/lib/auth-cookie'
 import { getJwtSecretBytes } from '@/lib/jwt-secret'
+import { isRole } from '@/lib/jwt'
 
 function forwardRequestId(request: NextRequest, id: string) {
   const reqHeaders = new Headers(request.headers)
@@ -48,7 +49,7 @@ async function requireAdminCookie(
   }
   try {
     const { payload } = await jose.jwtVerify(token, secret)
-    if (payload.role !== 'admin') {
+    if (!isRole(payload.role)) {
       return {
         ok: false,
         response: NextResponse.redirect(new URL('/login', request.url)),
@@ -121,7 +122,7 @@ export async function proxy(request: NextRequest) {
 
   try {
     const { payload } = await jose.jwtVerify(rawToken, secret)
-    if (payload.role !== 'admin') {
+    if (!isRole(payload.role)) {
       return withRequestId(
         NextResponse.json({ error: 'Unauthorized' }, { status: 401 }),
         requestId

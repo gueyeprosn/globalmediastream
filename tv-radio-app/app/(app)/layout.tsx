@@ -1,6 +1,6 @@
 import { AppShell } from "@/components/shell/app-shell"
 import { ADMIN_TOKEN_COOKIE } from "@/lib/auth-cookie"
-import { verifyAdminToken } from "@/lib/jwt"
+import { isRole, verifyAdminToken } from "@/lib/jwt"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
@@ -11,7 +11,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
   try {
     const payload = await verifyAdminToken(token)
-    if (payload.role !== "admin") {
+    if (!isRole(payload.role)) {
       redirect("/login")
     }
   } catch {

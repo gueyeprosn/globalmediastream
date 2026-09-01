@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { logInfo, logWarn } from "@/lib/logger"
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 
 type SrsDeleteResponse = {
   code: number
@@ -10,9 +11,9 @@ type SrsDeleteResponse = {
 const CID_RE = /^[A-Za-z0-9._:-]{1,128}$/
 const SRS_KICK_TIMEOUT_MS = 3_000
 
-export async function DELETE(request: NextRequest,
-  context: { params: Promise<{ cid: string }> }){
-  const __auth = await requireAuth(request)
+async function deleteHandler(request: NextRequest,
+  context: { params: Promise<{ cid: string }> }) {
+  const __auth = await requireRole('srs:kick')(request)
   if (!__auth.ok) return __auth.response
 
   const { cid: rawCid } = await context.params
@@ -67,3 +68,5 @@ export async function DELETE(request: NextRequest,
 
   return NextResponse.json(body || { code: 0 })
 }
+
+export const DELETE = withAudit('srs:kick', deleteHandler)

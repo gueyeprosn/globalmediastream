@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
+import { killWithEscalation } from '@/lib/process-kill'
+import { logInfo, logWarn } from '@/lib/logger'
 
 export const runtime = "nodejs"
 
@@ -39,8 +42,8 @@ async function saveState(state: RecordingState) {
   await writeFile(STATE_FILE, JSON.stringify(state, null, 2), "utf8")
 }
 
-export async function POST(request: NextRequest){
-  const __auth = await requireAuth(request)
+async function postHandler(request: NextRequest) {
+  const __auth = await requireRole('recording:stop')(request)
   if (!__auth.ok) return __auth.response
 
   const body = (await request.json().catch(() => null)) as
@@ -59,11 +62,30 @@ export async function POST(request: NextRequest){
   }
 
   if (rec.pid > 0) {
-    try {
-      process.kill(rec.pid, "SIGINT")
-    } catch {
-      // ignore
-    }
+    // Fire-and-forget : le SIGINT initial (arrêt propre ffmpeg) est quasi
+    // instantané dans le cas normal ; l'escalade SIGTERM/SIGKILL ne doit pas
+    // faire attendre la réponse HTTP à l'opérateur.
+    killWithEscalation(rec.pid, { graceSignal: "SIGINT" })
+      .then((result) => {
+        if (result.outcome === "unresponsive") {
+          logWarn(request, "recordings/stop", "ffmpeg ne répond à aucun signal", {
+            action: "recording_stop",
+            streamId,
+            pid: rec.pid,
+            result: "unresponsive",
+          })
+          return
+        }
+        logInfo(request, "recordings/stop", "ffmpeg arrêté", {
+          action: "recording_stop",
+          streamId,
+          pid: rec.pid,
+          result: result.outcome,
+        })
+      })
+      .catch(() => {
+        /* best-effort */
+      })
   }
 
   delete state.active[streamId]
@@ -71,4 +93,6 @@ export async function POST(request: NextRequest){
 
   return NextResponse.json({ ok: true })
 }
+
+export const POST = withAudit('recording:stop', postHandler)
 

@@ -6,7 +6,9 @@ import { resolveHlsUrlForRecording } from "@/lib/recordings-hls-sources"
 import { gateRecordingsDiskSpace } from "@/lib/recordings-disk"
 import { recordingStartBodySchema } from "@/lib/schemas/recordings"
 import { zodErrorResponse } from "@/lib/zod-response"
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
+import { isAlive } from '@/lib/process-kill'
 
 export const runtime = "nodejs"
 
@@ -34,7 +36,14 @@ async function loadState(): Promise<RecordingState> {
   try {
     const raw = await readFile(STATE_FILE, "utf8")
     const parsed = JSON.parse(raw) as RecordingState
-    return parsed?.active ? parsed : { active: {} }
+    if (!parsed?.active) return { active: {} }
+    // Réconciliation : purge les entrées dont le PID n'existe plus (crash
+    // serveur, ffmpeg tué hors de l'app) pour ne pas bloquer un futur "start"
+    // sur un enregistrement qu'on croit encore actif.
+    for (const [streamId, rec] of Object.entries(parsed.active)) {
+      if (!isAlive(rec.pid)) delete parsed.active[streamId]
+    }
+    return parsed
   } catch {
     return { active: {} }
   }
@@ -90,8 +99,8 @@ function spawnFfmpegDetached(args: string[]): Promise<{ pid: number; child: Retu
   })
 }
 
-export async function POST(request: NextRequest){
-  const __auth = await requireAuth(request)
+async function postHandler(request: NextRequest) {
+  const __auth = await requireRole('recording:start')(request)
   if (!__auth.ok) return __auth.response
 
   const raw = await request.json().catch(() => null)
@@ -202,3 +211,5 @@ export async function POST(request: NextRequest){
     },
   })
 }
+
+export const POST = withAudit('recording:start', postHandler)

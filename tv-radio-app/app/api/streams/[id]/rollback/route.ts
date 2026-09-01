@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFile, writeFile } from 'fs/promises'
 import { existsSync } from 'fs'
 import { getSrtStreamsRegistryPath } from '@/lib/paths'
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 import {
   assertSafeStreamRouteId,
   assertSafeSystemdUnit,
@@ -13,9 +14,9 @@ import { getStreamHistoryVersion } from '@/lib/stream-history'
 
 const RTMP_STREAMS_FILE = process.env.RTMP_STREAMS_REGISTRY_PATH || '/srv/rtmp-streams.json'
 
-export async function POST(request: Request,
-  { params }: { params: Promise<{ id: string }> }){
-  const __auth = await requireAuth(request)
+async function postHandler(request: Request,
+  { params }: { params: Promise<{ id: string }> }) {
+  const __auth = await requireRole('stream:rollback')(request)
   if (!__auth.ok) return __auth.response
 
   try {
@@ -91,3 +92,5 @@ export async function POST(request: Request,
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }
+
+export const POST = withAudit('stream:rollback', postHandler)

@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import type { JWTPayload } from 'jose'
 import { ADMIN_TOKEN_COOKIE } from '@/lib/auth-cookie'
-import { verifyAdminToken } from '@/lib/jwt'
+import { isRole, verifyAdminToken } from '@/lib/jwt'
 
 export type AuthOk = { ok: true; payload: JWTPayload; token: string }
 export type AuthFail = { ok: false; response: NextResponse }
@@ -45,7 +45,7 @@ export async function requireAuth(request: NextRequest | Request): Promise<AuthO
 
   try {
     const payload = await verifyAdminToken(token)
-    if (payload.role !== 'admin') {
+    if (!isRole(payload.role)) {
       return { ok: false, response: unauthorizedJson() }
     }
     return { ok: true, payload, token }

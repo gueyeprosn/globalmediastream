@@ -6,3 +6,7 @@ export function getStreamingBasePath(): string {
 export function getSrtStreamsRegistryPath(): string {
   return process.env.SRT_STREAMS_REGISTRY_PATH || `${getStreamingBasePath()}/srt-streams.json`
 }
+
+export function getAuditDbPath(): string {
+  return process.env.AUDIT_DB_PATH || `${getStreamingBasePath()}/audit.db`
+}

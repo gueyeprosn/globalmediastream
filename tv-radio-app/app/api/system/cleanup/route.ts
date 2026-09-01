@@ -4,7 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { logError, logInfo, logWarn } from '@/lib/logger'
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 import {
   chmodPlusX,
   fileExecutableViaTest,
@@ -20,8 +21,8 @@ export interface CleanupResult {
   timestamp: string
 }
 
-export async function POST(request: NextRequest){
-  const __auth = await requireAuth(request)
+async function postHandler(request: NextRequest) {
+  const __auth = await requireRole('system:cleanup')(request)
   if (!__auth.ok) return __auth.response
 
   try {
@@ -158,3 +159,5 @@ export async function POST(request: NextRequest){
     )
   }
 }
+
+export const POST = withAudit('system:cleanup', postHandler)
