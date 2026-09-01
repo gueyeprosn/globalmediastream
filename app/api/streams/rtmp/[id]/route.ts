@@ -3,6 +3,7 @@ import { readFile, writeFile, unlink, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import { requireAuth } from '@/lib/require-auth'
 import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 import {
   assertRtmpScriptPath,
   assertSafeStreamRouteId,
@@ -99,8 +100,8 @@ export async function GET(request: NextRequest,
 }
 
 // PUT - Modifier un stream RTMP
-export async function PUT(request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }){
+async function putHandler(request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }) {
   const __auth = await requireRole('stream:update')(request)
   if (!__auth.ok) return __auth.response
 
@@ -315,9 +316,11 @@ WantedBy=multi-user.target
   }
 }
 
+export const PUT = withAudit('stream:update', putHandler)
+
 // DELETE - Supprimer un stream RTMP
-export async function DELETE(request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }){
+async function deleteHandler(request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }) {
   const __auth = await requireRole('stream:delete')(request)
   if (!__auth.ok) return __auth.response
 
@@ -374,4 +377,6 @@ export async function DELETE(request: NextRequest,
     )
   }
 }
+
+export const DELETE = withAudit('stream:delete', deleteHandler)
 

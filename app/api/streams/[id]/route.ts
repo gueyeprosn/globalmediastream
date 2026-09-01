@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/require-auth'
 import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 import {
   assertSafeStreamRouteId,
   assertSafeSystemdUnit,
@@ -91,8 +92,8 @@ export async function GET(request: NextRequest,
   }
 }
 
-export async function POST(request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }){
+async function postHandler(request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }) {
   const __auth = await requireRole('stream:restart')(request)
   if (!__auth.ok) return __auth.response
 
@@ -136,3 +137,5 @@ export async function POST(request: NextRequest,
     )
   }
 }
+
+export const POST = withAudit('stream:restart', postHandler)

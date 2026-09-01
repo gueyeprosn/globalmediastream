@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 
 type SrsReloadResponse = {
   code: number
   message?: string
 }
 
-export async function POST(request: NextRequest){
+async function postHandler(request: NextRequest) {
   const __auth = await requireRole('srs:reload')(request)
   if (!__auth.ok) return __auth.response
 
@@ -26,4 +27,6 @@ export async function POST(request: NextRequest){
 
   return NextResponse.json(body || { code: 0 })
 }
+
+export const POST = withAudit('srs:reload', postHandler)
 

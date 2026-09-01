@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 import { killWithEscalation } from '@/lib/process-kill'
 import { logInfo, logWarn } from '@/lib/logger'
 
@@ -41,7 +42,7 @@ async function saveState(state: RecordingState) {
   await writeFile(STATE_FILE, JSON.stringify(state, null, 2), "utf8")
 }
 
-export async function POST(request: NextRequest){
+async function postHandler(request: NextRequest) {
   const __auth = await requireRole('recording:stop')(request)
   if (!__auth.ok) return __auth.response
 
@@ -92,4 +93,6 @@ export async function POST(request: NextRequest){
 
   return NextResponse.json({ ok: true })
 }
+
+export const POST = withAudit('recording:stop', postHandler)
 

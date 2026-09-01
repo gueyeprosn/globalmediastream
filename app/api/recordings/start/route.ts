@@ -7,6 +7,7 @@ import { gateRecordingsDiskSpace } from "@/lib/recordings-disk"
 import { recordingStartBodySchema } from "@/lib/schemas/recordings"
 import { zodErrorResponse } from "@/lib/zod-response"
 import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 import { isAlive } from '@/lib/process-kill'
 
 export const runtime = "nodejs"
@@ -98,7 +99,7 @@ function spawnFfmpegDetached(args: string[]): Promise<{ pid: number; child: Retu
   })
 }
 
-export async function POST(request: NextRequest){
+async function postHandler(request: NextRequest) {
   const __auth = await requireRole('recording:start')(request)
   if (!__auth.ok) return __auth.response
 
@@ -210,3 +211,5 @@ export async function POST(request: NextRequest){
     },
   })
 }
+
+export const POST = withAudit('recording:start', postHandler)

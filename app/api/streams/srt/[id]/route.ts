@@ -3,6 +3,7 @@ import { readFile, writeFile, unlink } from 'fs/promises'
 import { existsSync } from 'fs'
 import { getSrtStreamsRegistryPath } from '@/lib/paths'
 import { requireRole } from '@/lib/rbac'
+import { withAudit } from '@/lib/audit'
 import {
   assertSafeStreamRouteId,
   assertSafeSystemdUnit,
@@ -43,8 +44,8 @@ async function saveSrtStreamRegistry(streams: SrtStreamRegistryItem[]) {
   await writeFile(SRT_STREAMS_FILE, JSON.stringify(streams, null, 2))
 }
 
-export async function DELETE(request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }){
+async function deleteHandler(request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }) {
   const __auth = await requireRole('stream:delete')(request)
   if (!__auth.ok) return __auth.response
 
@@ -105,3 +106,5 @@ export async function DELETE(request: NextRequest,
     )
   }
 }
+
+export const DELETE = withAudit('stream:delete', deleteHandler)

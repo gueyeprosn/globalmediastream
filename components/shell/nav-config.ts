@@ -15,6 +15,7 @@ import {
   MapPinned,
   MonitorPlay,
   Network,
+  History,
 } from "lucide-react"
 
 export type SidebarBadgeKey = "activeStreams" | "activeRecordings"
@@ -85,6 +86,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Console SRS (infos)",
     icon: MonitorPlay,
   },
+  { section: "SYSTÈME", path: "/audit", label: "Journal d'audit", icon: History },
 ]
 
 export const PAGE_TITLES: Record<string, string> = {
@@ -103,6 +105,7 @@ export const PAGE_TITLES: Record<string, string> = {
   "/points-diffusion": "Points de diffusion",
   "/settings": "Configuration",
   "/srs-console": "Console SRS",
+  "/audit": "Journal d'audit",
 }
 
 export const ORYX_MGMT_URL = "https://stream.broadcastsn.com/mgmt/"
