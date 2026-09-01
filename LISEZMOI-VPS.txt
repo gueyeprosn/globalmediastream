@@ -1,0 +1,13 @@
+TOUBA TV — Pack VPS appttv
+===========================
+
+1. Lisez deploy/VPS-DEPLOIEMENT.md (guide complet)
+2. Cochez deploy/CHECKLIST.md
+3. Créez l'archive : ./scripts/package-for-vps.sh
+4. Uploadez deploy/out/appttv-vps.zip sur le VPS → /opt/toubatv/
+5. Ajoutez les secrets (voir deploy/files-a-ajouter/README.txt)
+6. Sur le VPS : ./scripts/install.sh && ./scripts/post-install-vps.sh
+
+URL finale : https://stream.broadcastsn.com/appttv
+
+Prompt IA (si vous uploadez ailleurs) : deploy/PROMPT-IA.md
