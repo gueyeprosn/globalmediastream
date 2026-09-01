@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFile, writeFile, unlink } from 'fs/promises'
 import { existsSync } from 'fs'
 import { getSrtStreamsRegistryPath } from '@/lib/paths'
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
 import {
   assertSafeStreamRouteId,
   assertSafeSystemdUnit,
@@ -45,7 +45,7 @@ async function saveSrtStreamRegistry(streams: SrtStreamRegistryItem[]) {
 
 export async function DELETE(request: NextRequest,
   { params }: { params: Promise<{ id: string }> }){
-  const __auth = await requireAuth(request)
+  const __auth = await requireRole('stream:delete')(request)
   if (!__auth.ok) return __auth.response
 
   const { id } = await params

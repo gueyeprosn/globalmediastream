@@ -6,7 +6,7 @@ import { resolveHlsUrlForRecording } from "@/lib/recordings-hls-sources"
 import { gateRecordingsDiskSpace } from "@/lib/recordings-disk"
 import { recordingStartBodySchema } from "@/lib/schemas/recordings"
 import { zodErrorResponse } from "@/lib/zod-response"
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
 import { isAlive } from '@/lib/process-kill'
 
 export const runtime = "nodejs"
@@ -99,7 +99,7 @@ function spawnFfmpegDetached(args: string[]): Promise<{ pid: number; child: Retu
 }
 
 export async function POST(request: NextRequest){
-  const __auth = await requireAuth(request)
+  const __auth = await requireRole('recording:start')(request)
   if (!__auth.ok) return __auth.response
 
   const raw = await request.json().catch(() => null)

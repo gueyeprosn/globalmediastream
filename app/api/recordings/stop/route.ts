@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
 import { killWithEscalation } from '@/lib/process-kill'
 import { logInfo, logWarn } from '@/lib/logger'
 
@@ -42,7 +42,7 @@ async function saveState(state: RecordingState) {
 }
 
 export async function POST(request: NextRequest){
-  const __auth = await requireAuth(request)
+  const __auth = await requireRole('recording:stop')(request)
   if (!__auth.ok) return __auth.response
 
   const body = (await request.json().catch(() => null)) as

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFile, writeFile, unlink, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
 import {
   assertRtmpScriptPath,
   assertSafeStreamRouteId,
@@ -100,7 +101,7 @@ export async function GET(request: NextRequest,
 // PUT - Modifier un stream RTMP
 export async function PUT(request: NextRequest,
   { params }: { params: Promise<{ id: string }> }){
-  const __auth = await requireAuth(request)
+  const __auth = await requireRole('stream:update')(request)
   if (!__auth.ok) return __auth.response
 
   const { id } = await params
@@ -317,7 +318,7 @@ WantedBy=multi-user.target
 // DELETE - Supprimer un stream RTMP
 export async function DELETE(request: NextRequest,
   { params }: { params: Promise<{ id: string }> }){
-  const __auth = await requireAuth(request)
+  const __auth = await requireRole('stream:delete')(request)
   if (!__auth.ok) return __auth.response
 
   const { id } = await params

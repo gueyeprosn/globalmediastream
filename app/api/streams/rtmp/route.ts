@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFile, writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
 import {
   chmodPlusX,
   psAuxFirstLineContaining,
@@ -150,7 +151,7 @@ export async function GET(request: NextRequest){
 
 // POST - Créer un nouveau stream RTMP
 export async function POST(request: NextRequest){
-  const __auth = await requireAuth(request)
+  const __auth = await requireRole('stream:create')(request)
   if (!__auth.ok) return __auth.response
 
   try {

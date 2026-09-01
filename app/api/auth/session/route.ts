@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/require-auth'
+import { isRole } from '@/lib/jwt'
 
 export const runtime = 'nodejs'
 
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
   const exp = typeof auth.payload.exp === 'number' ? auth.payload.exp : null
   return NextResponse.json({
     ok: true,
-    role: 'admin',
+    role: isRole(auth.payload.role) ? auth.payload.role : 'admin',
     expiresIn: exp != null ? Math.max(0, exp - Math.floor(Date.now() / 1000)) : null,
   })
 }

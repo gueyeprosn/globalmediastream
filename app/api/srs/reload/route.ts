@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
 
 type SrsReloadResponse = {
   code: number
@@ -7,7 +7,7 @@ type SrsReloadResponse = {
 }
 
 export async function POST(request: NextRequest){
-  const __auth = await requireAuth(request)
+  const __auth = await requireRole('srs:reload')(request)
   if (!__auth.ok) return __auth.response
 
   const res = await fetch(`http://127.0.0.1:1985/api/v1/raw?rpc=reload`, {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFile, writeFile } from 'fs/promises'
 import { existsSync } from 'fs'
 import { getSrtStreamsRegistryPath } from '@/lib/paths'
-import { requireAuth } from '@/lib/require-auth'
+import { requireRole } from '@/lib/rbac'
 import {
   assertSafeStreamRouteId,
   assertSafeSystemdUnit,
@@ -15,7 +15,7 @@ const RTMP_STREAMS_FILE = process.env.RTMP_STREAMS_REGISTRY_PATH || '/srv/rtmp-s
 
 export async function POST(request: Request,
   { params }: { params: Promise<{ id: string }> }){
-  const __auth = await requireAuth(request)
+  const __auth = await requireRole('stream:rollback')(request)
   if (!__auth.ok) return __auth.response
 
   try {
