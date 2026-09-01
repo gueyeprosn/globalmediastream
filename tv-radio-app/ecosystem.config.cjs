@@ -28,5 +28,31 @@ module.exports = {
         NEXT_TELEMETRY_DISABLED: '1',
       },
     },
+    {
+      /**
+       * Process séparé de oceanfm-app : survit aux redéploiements du
+       * dashboard (npm run deploy ne le touche pas). Bind loopback
+       * uniquement (127.0.0.1:3011), pas de proxy Nginx public pour
+       * l'instant — rien n'y est branché côté UI (squelette §B1).
+       */
+      name: 'ops-engine',
+      cwd: __dirname,
+      script: './node_modules/.bin/tsx',
+      args: ['ops-engine/index.ts'],
+      interpreter: 'node',
+      instances: 1,
+      exec_mode: 'fork',
+      autorestart: true,
+      max_restarts: 15,
+      min_uptime: '10s',
+      max_memory_restart: '400M',
+      kill_timeout: 10_000,
+      exp_backoff_restart_delay: 2000,
+      env: {
+        NODE_ENV: 'production',
+        OPS_ENGINE_PORT: '3011',
+        OPS_ENGINE_TICK_MS: '10000',
+      },
+    },
   ],
 }
