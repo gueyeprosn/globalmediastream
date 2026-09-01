@@ -1,0 +1,65 @@
+[
+  {
+    "id": "A-01",
+    "docSection": "Runbook incidents",
+    "page": "/incidents",
+    "api": "N/A",
+    "priority": "P1",
+    "status": "termine",
+    "scope": "Creer une base operateur avec checklist + commandes copiables."
+  },
+  {
+    "id": "A-02",
+    "docSection": "Supervision flux",
+    "page": "/monitoring",
+    "api": "/api/system/metrics",
+    "priority": "P1",
+    "status": "en_cours",
+    "scope": "Ajouter des seuils visuels CPU/RAM/disque et un etat de sante synthetique."
+  },
+  {
+    "id": "A-03",
+    "docSection": "Exploitation streaming",
+    "page": "/",
+    "api": "/api/streams, /api/srs/sessions",
+    "priority": "P1",
+    "status": "en_cours",
+    "scope": "Finaliser les actions rapides orientees incidents et rollback operateur."
+  },
+  {
+    "id": "A-04",
+    "docSection": "Creation points RTMP/SRT",
+    "page": "/",
+    "api": "/api/streams/create, /api/streams/:id",
+    "priority": "P1",
+    "status": "en_cours",
+    "scope": "Ajouter tests fonctionnels de lecture + etats plus explicites apres controle."
+  },
+  {
+    "id": "A-05",
+    "docSection": "Qualite UX desktop",
+    "page": "/",
+    "api": "N/A",
+    "priority": "P2",
+    "status": "a_faire",
+    "scope": "Ameliorer densite/espacement des cartes laterales en grand ecran."
+  },
+  {
+    "id": "A-06",
+    "docSection": "Logs & diagnostic",
+    "page": "/logs",
+    "api": "/api/logs",
+    "priority": "P2",
+    "status": "a_faire",
+    "scope": "Ajouter presets de filtres (service, niveau, fenetre temporelle)."
+  },
+  {
+    "id": "A-07",
+    "docSection": "Parametres exploitation",
+    "page": "/settings",
+    "api": "N/A",
+    "priority": "P3",
+    "status": "a_faire",
+    "scope": "Ajouter mode guide (assistant) pour onboarding operateur junior."
+  }
+]
