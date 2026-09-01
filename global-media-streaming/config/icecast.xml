@@ -1,0 +1,119 @@
+<icecast>
+    <location>Global Media</location>
+    <admin>admin@broadcastsn.com</admin>
+    
+    <limits>
+        <clients>200</clients>
+        <sources>20</sources>
+        <queue-size>1048576</queue-size>
+        <client-timeout>60</client-timeout>
+        <header-timeout>30</header-timeout>
+        <source-timeout>30</source-timeout>
+        <burst-on-connect>1</burst-on-connect>
+        <burst-size>131070</burst-size>
+    </limits>
+
+    <authentication>
+        <source-password>CHANGE_ME_STRONG_SOURCE_PASSWORD</source-password>
+        <relay-password>CHANGE_ME_STRONG_RELAY_PASSWORD</relay-password>
+        <admin-user>admin</admin-user>
+        <admin-password>CHANGE_ME_STRONG_ADMIN_PASSWORD</admin-password>
+    </authentication>
+
+    <hostname>stream.broadcastsn.com</hostname>
+    <listen-socket>
+        <port>8000</port>
+        <bind-address>0.0.0.0</bind-address>
+    </listen-socket>
+    
+    <!-- Port pour recevoir le stream source (avant traitement) -->
+    <listen-socket>
+        <port>8001</port>
+        <bind-address>0.0.0.0</bind-address>
+    </listen-socket>
+
+    <mount>
+        <mount-name>/oceanfm</mount-name>
+        <username>source</username>
+        <password>CHANGE_ME_STRONG_SOURCE_PASSWORD</password>
+        <max-listeners>500</max-listeners>
+        <dump-file>/var/log/icecast2/access.log</dump-file>
+        <burst-size>65536</burst-size>
+        <fallback-mount>/oceanfm</fallback-mount>
+        <fallback-override>1</fallback-override>
+        <fallback-when-full>1</fallback-when-full>
+        <hidden>0</hidden>
+        <public>1</public>
+        <stream-name>OceanFM - Global Media</stream-name>
+        <stream-description>Radio streaming OceanFM - Global Media Broadcasting</stream-description>
+        <stream-url>https://stream.broadcastsn.com</stream-url>
+        <genre>Various</genre>
+        <bitrate>128</bitrate>
+        <metadata>1</metadata>
+    </mount>
+
+    <!-- Mount pour recevoir le stream source (avant traitement audio) -->
+    <mount>
+        <mount-name>/oceanfm-source</mount-name>
+        <username>source</username>
+        <password>CHANGE_ME_STRONG_SOURCE_PASSWORD</password>
+        <max-listeners>10</max-listeners>
+        <dump-file>/var/log/icecast2/source_access.log</dump-file>
+        <burst-size>65536</burst-size>
+        <hidden>0</hidden>
+        <public>1</public>
+        <stream-name>OceanFM Source - Global Media</stream-name>
+        <stream-description>Source audio avant traitement</stream-description>
+        <stream-url>https://stream.broadcastsn.com</stream-url>
+        <genre>Live</genre>
+        <bitrate>128</bitrate>
+        <metadata>1</metadata>
+    </mount>
+
+    <!-- Mount pour production extérieure radio -->
+    <mount>
+        <mount-name>/external-radio</mount-name>
+        <username>source</username>
+        <password>CHANGE_ME_STRONG_EXTERNAL_PASSWORD</password>
+        <max-listeners>500</max-listeners>
+        <dump-file>/var/log/icecast2/external_access.log</dump-file>
+        <burst-size>65536</burst-size>
+        <fallback-mount>/external-radio</fallback-mount>
+        <fallback-override>1</fallback-override>
+        <fallback-when-full>1</fallback-when-full>
+        <hidden>0</hidden>
+        <public>1</public>
+        <stream-name>External Radio - Global Media</stream-name>
+        <stream-description>Radio streaming externe - Production extérieure</stream-description>
+        <stream-url>https://stream.broadcastsn.com</stream-url>
+        <genre>Live</genre>
+        <bitrate>128</bitrate>
+        <metadata>1</metadata>
+    </mount>
+
+    <fileserve>1</fileserve>
+    <paths>
+        <basedir>/usr/share/icecast2</basedir>
+        <logdir>/var/log/icecast2</logdir>
+        <webroot>/usr/share/icecast2/web</webroot>
+        <adminroot>/usr/share/icecast2/admin</adminroot>
+        <alias source="/" dest="/status.xsl"/>
+    </paths>
+
+    <logging>
+        <accesslog>access.log</accesslog>
+        <errorlog>error.log</errorlog>
+        <loglevel>3</loglevel>
+        <logsize>10000</logsize>
+        <logarchive>1</logarchive>
+    </logging>
+
+    <security>
+        <chroot>0</chroot>
+        <changeowner>
+            <user>icecast2</user>
+            <group>icecast</group>
+        </changeowner>
+    </security>
+</icecast>
+
